@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="hi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday My Special One! ❤️✨</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        roseGold: '#B76E79',
+                        softPink: '#FFF0F5',
+                        deepRose: '#FF6B8B',
+                        warmPeach: '#FFD1DC',
+                        accentViolet: '#A29BFE'
+                    },
+                    fontFamily: {
+                        cursive: ['Dancing Script', 'cursive'],
+                        hand: ['Caveat', 'cursive'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom Animations & Effects */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.8; filter: drop-shadow(0 0 15px rgba(255, 107, 139, 0.6)); }
+            50% { opacity: 1; filter: drop-shadow(0 0 25px rgba(255, 107, 139, 0.9)); }
+        }
+        @keyframes flicker {
+            0%, 100% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
+            25% { transform: scale(1.1) rotate(2deg); opacity: 1; }
+            50% { transform: scale(0.95) rotate(-1deg); opacity: 0.8; }
+            75% { transform: scale(1.05) rotate(1deg); opacity: 1; }
+        }
+
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .animate-flicker { animation: flicker 0.6s ease-in-out infinite; }
+        .pulse-glow { animation: pulseGlow 2s infinite; }
+
+        /* Memory Card Flip Effect */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+
+        /* Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        .glass-dark {
+            background: rgba(30, 20, 35, 0.55);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Cake Candle CSS */
+        .flame {
+            width: 16px;
+            height: 26px;
+            background: linear-gradient(to top, #ff9d00, #ff5100, #fff700);
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -26px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 15px #ff9d00, 0 0 30px #ff5100;
+            transform-origin: center bottom;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fff0f5; }
+        ::-webkit-scrollbar-thumb { background: #ff6b8b; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-pink-950 to-slate-900 text-slate-100 font-sans min-h-screen overflow-x-hidden relative selection:bg-pink-500 selection:text-white">
+
+    <canvas id="bgCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Floating Audio Control Button -->
+    <div class="fixed top-5 right-5 z-50">
+        <button id="musicToggle" onclick="toggleMusic()" class="glass-card text-pink-600 hover:text-pink-700 p-3.5 rounded-full shadow-lg border border-pink-200/50 hover:scale-110 transition-all duration-300 flex items-center justify-center group" title="Play Music">
+            <i data-lucide="music" id="musicIcon" class="w-6 h-6 group-hover:rotate-12 transition-transform"></i>
+        </button>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="relative z-10 max-w-4xl mx-auto px-4 py-8 space-y-24">
+
+        <section class="min-h-[85vh] flex flex-col justify-center items-center text-center pt-8 relative">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-pink-600 font-medium text-sm mb-6 shadow-sm border border-pink-300/40 animate-bounce">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                <span>A Very Special Wish For Someone Special</span>
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-bold font-cursive bg-gradient-to-r from-pink-300 via-rose-200 to-amber-200 bg-clip-text text-transparent leading-tight py-2 drop-shadow-md">
+                Happy Birthday, Princess! 🎂✨
+            </h1>
+
+            <p class="mt-4 text-lg md:text-xl text-pink-100/90 font-hand max-w-xl text-2xl tracking-wide">
+                "Aaj ka din utna hi khubsoorat hai jitni tumhari smile hai! Always keep shining & smiling ❤️"
+            </p>
+
+            <div class="mt-8 flex flex-wrap justify-center gap-4">
+                <a href="#cake-section" class="px-7 py-3.5 rounded-full bg-gradient-to-r from-deepRose to-pink-500 text-white font-semibold shadow-lg shadow-pink-500/30 hover:shadow-pink-500/50 hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                    <i data-lucide="cake" class="w-5 h-5"></i>
+                    Blow The Candle
+                </a>
+                <a href="#memory-section" class="px-7 py-3.5 rounded-full glass-dark text-pink-200 font-semibold border border-pink-400/30 hover:bg-pink-900/40 hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                    <i data-lucide="heart" class="w-5 h-5 text-pink-400"></i>
+                    Our Memories
+                </a>
+            </div>
+
+            <div class="mt-16 animate-float">
+                <div class="w-16 h-16 rounded-full glass-card flex items-center justify-center text-pink-500 shadow-xl border border-pink-200/50">
+                    <i data-lucide="gift" class="w-8 h-8 pulse-glow"></i>
+                </div>
+            </div>
+        </section>
+
+        <section id="memory-section" class="space-y-8 scroll-mt-10">
+            <div class="text-center space-y-2">
+                <h2 class="text-3xl md:text-4xl font-bold font-cursive text-pink-300">Cute Memory Lane 📸</h2>
+                <p class="text-slate-300 text-sm md:text-base">Click or tap on any card to reveal cute notes!</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Memory Card 1 -->
+                <div class="perspective-1000 h-64 cursor-pointer group" onclick="flipCard(this)">
+                    <div class="card-inner relative w-full h-full duration-700 transform-style-3d shadow-xl rounded-2xl">
+                        <!-- Front -->
+                        <div class="absolute inset-0 w-full h-full rounded-2xl glass-dark border border-pink-500/20 p-6 flex flex-col justify-between items-center text-center backface-hidden group-hover:border-pink-500/50 transition-colors">
+                            <div class="p-4 rounded-full bg-pink-500/10 text-pink-400 mt-2">
+                                <i data-lucide="smile" class="w-10 h-10"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-pink-200 font-hand text-2xl">That Million Dollar Smile</h3>
+                                <p class="text-xs text-slate-400 mt-1">Tap to flip ✨</p>
+                            </div>
+                            <span class="text-xs px-3 py-1 rounded-full bg-pink-500/20 text-pink-300">Memory #1</span>
+                        </div>
+                        <!-- Back -->
+                        <div class="absolute inset-0 w-full h-full rounded-2xl bg-gradient-to-br from-pink-600 to-rose-700 p-6 flex flex-col justify-center items-center text-center rotate-y-180 backface-hidden text-white shadow-inner">
+                            <i data-lucide="sparkle" class="w-8 h-8 mb-3 text-amber-200"></i>
+                            <p class="font-hand text-2xl leading-snug">"Tumhari smile poore din ki saari tiredness door kar deti hai. Keep smiling always!" 😊💖</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Memory Card 2 -->
+                <div class="perspective-1000 h-64 cursor-pointer group" onclick="flipCard(this)">
+                    <div class="card-inner relative w-full h-full duration-700 transform-style-3d shadow-xl rounded-2xl">
+                        <!-- Front -->
+                        <div class="absolute inset-0 w-full h-full rounded-2xl glass-dark border border-pink-500/20 p-6 flex flex-col justify-between items-center text-center backface-hidden group-hover:border-pink-500/50 transition-colors">
+                            <div class="p-4 rounded-full bg-purple-500/10 text-purple-400 mt-2">
+                                <i data-lucide="moon" class="w-10 h-10"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-pink-200 font-hand text-2xl">Late Night Talks</h3>
+                                <p class="text-xs text-slate-400 mt-1">Tap to flip ✨</p>
+                            </div>
+                            <span class="text-xs px-3 py-1 rounded-full bg-purple-500/20 text-purple-300">Memory #2</span>
+                        </div>
+                        <!-- Back -->
+                        <div class="absolute inset-0 w-full h-full rounded-2xl bg-gradient-to-br from-purple-600 to-indigo-700 p-6 flex flex-col justify-center items-center text-center rotate-y-180 backface-hidden text-white shadow-inner">
+                            <i data-lucide="message-circle-heart" class="w-8 h-8 mb-3 text-pink-200"></i>
+                            <p class="font-hand text-2xl leading-snug">"Raat bhar ki baatein, stupid jokes aur endless laughs... best memories forever!" 🌙✨</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Memory Card 3 -->
+                <div class="perspective-1000 h-64 cursor-pointer group" onclick="flipCard(this)">
+                    <div class="card-inner relative w-full h-full duration-700 transform-style-3d shadow-xl rounded-2xl">
+                        <!-- Front -->
+                        <div class="absolute inset-0 w-full h-full rounded-2xl glass-dark border border-pink-500/20 p-6 flex flex-col justify-between items-center text-center backface-hidden group-hover:border-pink-500/50 transition-colors">
+                            <div class="p-4 rounded-full bg-amber-500/10 text-amber-400 mt-2">
+                                <i data-lucide="heart-handshake" class="w-10 h-10"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-pink-200 font-hand text-2xl">Unconditional Support</h3>
+                                <p class="text-xs text-slate-400 mt-1">Tap to flip ✨</p>
+                            </div>
+                            <span class="text-xs px-3 py-1 rounded-full bg-amber-500/20 text-amber-300">Memory #3</span>
+                        </div>
+                        <!-- Back -->
+                        <div class="absolute inset-0 w-full h-full rounded-2xl bg-gradient-to-br from-rose-500 to-amber-600 p-6 flex flex-col justify-center items-center text-center rotate-y-180 backface-hidden text-white shadow-inner">
+                            <i data-lucide="sun" class="w-8 h-8 mb-3 text-yellow-200"></i>
+                            <p class="font-hand text-2xl leading-snug">"Hamesha saath rehne ke liye & life ko itna khubsoorat banane ke liye THANK YOU!" 🌟❤️</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-8 glass-dark p-8 rounded-3xl border border-pink-500/20 relative overflow-hidden">
+            <div class="text-center space-y-2">
+                <h2 class="text-3xl md:text-4xl font-bold font-cursive text-pink-300">Unwrap Your Gifts! 🎁</h2>
+                <p class="text-slate-300 text-sm md:text-base">Tap on each gift box to reveal hidden sweet surprises!</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- Gift 1 -->
+                <button onclick="unwrapGift(this, 'You are pure magic! ✨ Never change for anyone!')" class="gift-box group bg-slate-800/80 hover:bg-pink-900/40 border border-pink-500/30 p-6 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-xl hover:shadow-pink-500/20">
+                    <div class="text-4xl group-hover:scale-125 transition-transform duration-300 mb-2">🎁</div>
+                    <span class="text-xs font-semibold text-pink-300">Gift #1</span>
+                </button>
+
+                <!-- Gift 2 -->
+                <button onclick="unwrapGift(this, 'Sending you 1000x virtual hugs and endless happiness! 🤗💖')" class="gift-box group bg-slate-800/80 hover:bg-pink-900/40 border border-pink-500/30 p-6 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-xl hover:shadow-pink-500/20">
+                    <div class="text-4xl group-hover:scale-125 transition-transform duration-300 mb-2">🎈</div>
+                    <span class="text-xs font-semibold text-pink-300">Gift #2</span>
+                </button>
+
+                <!-- Gift 3 -->
+                <button onclick="unwrapGift(this, 'May all your dreams & wishes come true this year! 🌟')" class="gift-box group bg-slate-800/80 hover:bg-pink-900/40 border border-pink-500/30 p-6 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-xl hover:shadow-pink-500/20">
+                    <div class="text-4xl group-hover:scale-125 transition-transform duration-300 mb-2">🧸</div>
+                    <span class="text-xs font-semibold text-pink-300">Gift #3</span>
+                </button>
+
+                <!-- Gift 4 -->
+                <button onclick="unwrapGift(this, 'A unlimited pass for free treats & endless fun! 🍦🍿')" class="gift-box group bg-slate-800/80 hover:bg-pink-900/40 border border-pink-500/30 p-6 rounded-2xl flex flex-col items-center justify-center transition-all duration-300 transform hover:-translate-y-2 hover:shadow-xl hover:shadow-pink-500/20">
+                    <div class="text-4xl group-hover:scale-125 transition-transform duration-300 mb-2">🎂</div>
+                    <span class="text-xs font-semibold text-pink-300">Gift #4</span>
+                </button>
+            </div>
+
+            <!-- Gift Surprise Display Box -->
+            <div id="giftOutput" class="hidden glass-card p-4 rounded-2xl text-center text-pink-700 font-hand text-2xl border border-pink-300 shadow-md animate-bounce">
+            </div>
+        </section>
+
+        <section id="cake-section" class="scroll-mt-10 glass-dark p-8 md:p-12 rounded-3xl border border-pink-500/30 text-center space-y-8 relative">
+            <div>
+                <h2 class="text-3xl md:text-5xl font-bold font-cursive text-pink-300">Time To Blow The Candle! 🎂</h2>
+                <p class="text-slate-300 text-sm md:text-base mt-2">Make a wish & click on the candle flame!</p>
+            </div>
+
+            <!-- Interactive Cake Graphic -->
+            <div class="py-8 flex justify-center items-center">
+                <div class="relative cursor-pointer group" onclick="blowCandle()">
+                    <!-- Candle Wick & Flame -->
+                    <div id="candleContainer" class="relative mx-auto w-4 h-12 bg-gradient-to-r from-amber-100 to-amber-300 rounded-t-sm shadow-md z-20">
+                        <div id="flame" class="flame animate-flicker"></div>
+                    </div>
+
+                    <!-- Cake Top Layer -->
+                    <div class="w-44 h-16 bg-gradient-to-r from-pink-400 to-rose-400 rounded-t-3xl relative z-10 border-b-4 border-pink-500 shadow-lg flex items-center justify-center">
+                        <span class="text-xs text-white/80 font-hand text-lg">Happy Birthday</span>
+                    </div>
+
+                    <!-- Cake Middle Layer -->
+                    <div class="w-56 h-16 bg-gradient-to-r from-rose-500 to-pink-600 rounded-t-2xl -mt-2 relative z-0 border-b-4 border-rose-700 shadow-lg flex items-center justify-center">
+                        <div class="flex space-x-2">
+                            <span class="text-pink-200">🍓</span>
+                            <span class="text-pink-200">✨</span>
+                            <span class="text-pink-200">🍓</span>
+                        </div>
+                    </div>
+
+                    <!-- Cake Base -->
+                    <div class="w-68 h-10 bg-amber-100/20 backdrop-blur-md rounded-b-2xl -mt-1 mx-auto border border-pink-300/30 flex items-center justify-center">
+                        <div class="w-full h-2 bg-pink-400/40 rounded-full mx-4"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cakeStatus" class="text-lg font-medium text-pink-200">
+                🔥 Candle is glowing... Tap on the flame!
+            </div>
+        </section>
+
+        <section class="text-center space-y-6 glass-dark p-8 rounded-3xl border border-pink-500/20">
+            <h2 class="text-3xl font-bold font-cursive text-pink-300">Click for a Instant Smile 😊</h2>
+            <p class="text-slate-300 text-sm">Need a little boost? Tap below for sweet reminders!</p>
+
+            <button onclick="generateWish()" class="px-8 py-4 rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 text-white font-bold text-lg shadow-xl shadow-pink-500/30 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center gap-3 mx-auto">
+                <i data-lucide="sparkle" class="w-6 h-6"></i>
+                <span>Get Sweet Wish</span>
+            </button>
+
+            <div id="wishDisplay" class="min-h-[80px] flex items-center justify-center p-6 rounded-2xl glass-card text-slate-800 text-xl font-hand md:text-2xl font-bold border border-pink-200 shadow-inner transition-all duration-500">
+                "Click the button above to unlock a sweet secret wish!" ✨
+            </div>
+        </section>
+
+        <section class="space-y-6">
+            <div class="text-center">
+                <h2 class="text-3xl md:text-4xl font-bold font-cursive text-pink-300">A Little Note For You 💌</h2>
+            </div>
+
+            <div class="glass-card p-8 md:p-12 rounded-3xl text-slate-800 space-y-6 shadow-2xl border border-white/80 relative overflow-hidden">
+                <div class="absolute -top-6 -right-6 text-pink-200/40 text-9xl font-cursive pointer-events-none select-none">❤️</div>
+                
+                <h3 class="text-2xl font-bold text-pink-600 font-hand text-3xl">Dear Birthday Girl,</h3>
+                
+                <p class="text-base md:text-lg text-slate-700 leading-relaxed font-sans">
+                    Tumhari presence hi meri life mein itni positivity aur khushiyan lati hai. Tumhare bina har moment thoda adhoora sa lagta hai. Aaj ke din bas yahi wish hai ki tum hamesha aisi hi hasti muskurati raho!
+                </p>
+
+                <p class="text-base md:text-lg text-slate-700 leading-relaxed font-sans">
+                    May this new year of your life bring you endless laughter, huge success, healthy life, and all the magical moments that you truly deserve. Never lose that bright, beautiful smile of yours!
+                </p>
+
+                <div class="pt-4 border-t border-pink-200/60 flex justify-between items-center">
+                    <div>
+                        <p class="font-hand text-2xl font-bold text-pink-600">Hamesha Khush Raho! ✨</p>
+                        <p class="text-xs text-slate-500">With lots of care & best wishes ❤️</p>
+                    </div>
+                    <div class="text-3xl">🥳🎉</div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center pt-8 pb-12 border-t border-slate-800/80 text-slate-400 text-sm space-y-2">
+            <p class="font-cursive text-xl text-pink-300">Made with ❤️ for your special day</p>
+            <p class="text-xs text-slate-500">Have an amazing birthday filled with love & joy!</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // 1. Canvas Background Floating Hearts & Stars
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 20;
+                this.size = Math.random() * 15 + 8;
+                this.speedY = Math.random() * 1.5 + 0.5;
+                this.opacity = Math.random() * 0.5 + 0.3;
+                this.type = Math.random() > 0.4 ? 'heart' : 'star';
+                this.color = `hsl(${Math.random() * 40 + 330}, 100%, 75%)`;
+            }
+            update() {
+                this.y -= this.speedY;
+                if (this.y < -20) this.reset();
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+                if (this.type === 'heart') {
+                    ctx.font = `${this.size}px serif`;
+                    ctx.fillText('❤️', this.x, this.y);
+                } else {
+                    ctx.font = `${this.size}px serif`;
+                    ctx.fillText('✨', this.x, this.y);
+                }
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < 35; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateBg() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
+
+        // 2. Memory Card Flip Function
+        function flipCard(card) {
+            const inner = card.querySelector('.card-inner');
+            inner.classList.toggle('rotate-y-180');
+        }
+
+        // 3. Gift Unwrapping Logic
+        function unwrapGift(btn, message) {
+            btn.classList.add('scale-90', 'opacity-50');
+            const output = document.getElementById('giftOutput');
+            output.innerHTML = `🎁 Surprise: "<strong>${message}</strong>"`;
+            output.classList.remove('hidden');
+
+            confetti({
+                particleCount: 40,
+                spread: 60,
+                origin: { y: 0.7 }
+            });
+        }
+
+        // 4. Cake Candle Blow Out
+        let isCandleBlown = false;
+        function blowCandle() {
+            if (isCandleBlown) return;
+
+            const flame = document.getElementById('flame');
+            const status = document.getElementById('cakeStatus');
+
+            flame.style.display = 'none';
+            isCandleBlown = true;
+
+            status.innerHTML = "🎉 Yay! Make a wish! Happy Birthday! 🥳✨";
+            status.classList.add('text-amber-300', 'font-bold', 'text-xl');
+
+            // Sound Effect using Tone.js
+            try {
+                const synth = new Tone.PolySynth().toDestination();
+                const now = Tone.now();
+                synth.triggerAttackRelease(["C4", "E4", "G4", "C5"], "8n", now);
+                synth.triggerAttackRelease(["G4", "B4", "D5", "G5"], "8n", now + 0.2);
+            } catch (e) {
+                console.log('Audio synth playback blocked or unsupported');
+            }
+
+            // Big Confetti Blast
+            confetti({
+                particleCount: 120,
+                spread: 100,
+                origin: { y: 0.6 }
+            });
+
+            setTimeout(() => {
+                confetti({
+                    particleCount: 80,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+                confetti({
+                    particleCount: 80,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+            }, 300);
+        }
+
+        // 5. Random Wish Generator
+        const wishes = [
+            "Tumhari smile poore din ko bright kar deti hai! Always keep shining ✨",
+            "You deserve all the sweetness, happiness & joy in the entire universe! 🌟",
+            "Aap hamesha aise hi muskurate raho aur sabki life me khushiyan bikhapte raho 💖",
+            "May your year ahead be full of amazing adventures & sweet surprises! 🍦",
+            "You are a rare gift to everyone who knows you! Stay wonderful! 💐",
+            "Har din tumhare liye khubsoorat yaadein le kar aaye! Happy Birthday! 🎉"
+        ];
+
+        function generateWish() {
+            const display = document.getElementById('wishDisplay');
+            const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
+            
+            display.style.opacity = 0;
+            setTimeout(() => {
+                display.innerHTML = `"${randomWish}"`;
+                display.style.opacity = 1;
+            }, 200);
+
+            confetti({
+                particleCount: 25,
+                spread: 50,
+                origin: { y: 0.8 }
+            });
+        }
+
+        // 6. Background Music Synth Chime Player
+        let isPlaying = false;
+        let bgLoop;
+
+        function toggleMusic() {
+            const icon = document.getElementById('musicIcon');
+            
+            if (!isPlaying) {
+                try {
+                    Tone.start();
+                    const synth = new Tone.Synth({
+                        oscillator: { type: "sine" },
+                        envelope: { attack: 0.1, decay: 0.2, sustain: 0.5, release: 1 }
+                    }).toDestination();
+                    synth.volume.value = -12;
+
+                    const notes = ["C4", "E4", "G4", "B4", "C5", "G4", "E4"];
+                    let index = 0;
+
+                    bgLoop = setInterval(() => {
+                        synth.triggerAttackRelease(notes[index % notes.length], "8n");
+                        index++;
+                    }, 400);
+
+                    isPlaying = true;
+                    icon.classList.add('text-pink-500', 'animate-spin');
+                } catch(e) {
+                    console.log('Audio error:', e);
+                }
+            } else {
+                clearInterval(bgLoop);
+                isPlaying = false;
+                icon.classList.remove('text-pink-500', 'animate-spin');
+            }
+        }
+    </script>
+</body>
+</html>
